@@ -43,7 +43,7 @@ class _SearchPage extends State<SearchPage> {
                       },
 
                     decoration: const InputDecoration(
-                      hintText: '아이템명',
+                      hintText: '문자열을 입력해주세요',
                       labelStyle: TextStyle(color: Colors.redAccent),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
