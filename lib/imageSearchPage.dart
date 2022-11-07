@@ -50,11 +50,19 @@ class _ImagePage extends State<ImagePage> {
                  FloatingActionButton(
                    tooltip: 'pick gallery image',
                    onPressed: () {
-                     final image = GetImage().galleryImage();
-                     image.then((img){
-                       sendDataPath = img.path;
-                       print("image Path : ${sendDataPath}");
+                     final path = GetImage().galleryImage(image);
+                     path.then((img){
+                       sendDataPath = img;
+                       print("test1, this image Path : $sendDataPath");
+
                      });
+
+                     //image = GetImage().galleryImage();
+                     //image.then((img){
+                     //  sendDataPath = img.path;
+                     print("test2, this image sendDataPath : $sendDataPath"); //null 출력
+                     //});
+
                      //throw 발생
                      //final img = image as XFile?;
                      //if (img != null) {
@@ -66,11 +74,11 @@ class _ImagePage extends State<ImagePage> {
                    child: const Icon(Icons.wallpaper),
                  ),
 
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 200.0,
                 child: Center(
-                  child: image  ==null
+                  child: image  == null
                   ? const Text('No Image selected')
                   : Image.file(sendDataPath),
                 ),

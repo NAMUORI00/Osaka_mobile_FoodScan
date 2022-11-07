@@ -24,19 +24,22 @@ class GetImage{
   final ImagePicker picker = ImagePicker();
 
   //갤러리에 있는 단일 이미지 선택
-  Future galleryImage() async {
-    XFile? image = await picker.pickImage(
+  Future galleryImage(XFile? image) async {
+
+    image = await picker.pickImage(
       source: ImageSource.gallery,
-      maxHeight: 75,
-      maxWidth: 75,
-      imageQuality: 30, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
+      //maxHeight: 75,
+      //maxWidth: 75,
+      //imageQuality: 30, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
     );
 
-    return image;
     //이미지 경로 저장
     if (image != null) {
       dynamic sendData = image.path;
+
+      return sendData;
     }
+
   }
 
 
