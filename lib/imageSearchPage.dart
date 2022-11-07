@@ -1,6 +1,26 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:osaka/imageProcess.dart';
+
+/*참조 중
+https://stackoverflow.com/questions/44841729/how-to-upload-images-to-server-in-flutter/51322060#51322060
+https://usedpaper.tistory.com/58
+https://dkswnkk.tistory.com/334
+
+https://pub.dev/packages/image_picker
+*/
+/*
+    // Pick an image 갤러리에서 이미지 선택
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    // Capture a photo 카메라로 이미지 촬영
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    // Pick a video 갤러리에서 비디오 선택
+    final XFile? image = await _picker.pickVideo(source: ImageSource.gallery);
+    // Capture a video 카메라로 비디오 촬영
+    final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
+    // Pick multiple images 여러 이미지 선택
+    final List<XFile>? images = await _picker.pickMultiImage();
+*/
 
 class ImagePage extends StatefulWidget {
   const ImagePage({Key? key, required this.title}) : super(key: key);
@@ -11,15 +31,22 @@ class ImagePage extends StatefulWidget {
   State<ImagePage> createState() => _ImagePage();
 }
 
-
-
 class _ImagePage extends State<ImagePage> {
+  File? _image;
+  final picker = ImagePicker();
 
-   XFile? image;
-  dynamic sendDataPath;
-  //임시
-  //final picker = ImagePicker();
-  TextEditingController inputController = TextEditingController();
+  Future getImage(ImageSource imageSource) async{
+    final image = await picker.pickImage(
+        source: imageSource,
+      //maxHeight: 75,
+      //maxWidth: 75,
+      //imageQuality: 30, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
+    );
+
+    setState(() {
+      _image = File(image!.path); // 가져온 이미지를 _image에 저장
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +66,12 @@ class _ImagePage extends State<ImagePage> {
                 padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
               ),
 
+                 showImage(),
+
                  FloatingActionButton(
                    tooltip: 'pick camera',
                    onPressed: () {
-                     final image = GetImage().cameraImage();
+                     getImage(ImageSource.camera);
                    },
                    child: const Icon(Icons.add_a_photo),
                  ),
@@ -50,46 +79,31 @@ class _ImagePage extends State<ImagePage> {
                  FloatingActionButton(
                    tooltip: 'pick gallery image',
                    onPressed: () {
-                     final path = GetImage().galleryImage(image);
-                     path.then((img){
-                       sendDataPath = img;
-                       print("test1, this image Path : $sendDataPath");
+                     getImage(ImageSource.gallery);
 
-                     });
+                     //path.then((img){
+                     //  sendDataPath = img;
+                     //  print("test1, this image Path : $sendDataPath");
+                     //});
 
                      //image = GetImage().galleryImage();
                      //image.then((img){
                      //  sendDataPath = img.path;
-                     print("test2, this image sendDataPath : $sendDataPath"); //null 출력
+                     //print("test2, this image sendDataPath : $sendDataPath"); //null 출력
                      //});
-
-                     //throw 발생
-                     //final img = image as XFile?;
-                     //if (img != null) {
-                     //  sendDataPath = img.path;
-                     //  print("image Path : ${sendDataPath}");
-                    // }
 
                    },
                    child: const Icon(Icons.wallpaper),
                  ),
 
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 200.0,
-                child: Center(
-                  child: image  == null
-                  ? const Text('No Image selected')
-                  : Image.file(sendDataPath),
-                ),
-              ),
+
 
               ElevatedButton(
                 onPressed: () {
                   setState(() {
                   });
                   },
-                child: const Text('검색'),
+                child: const Text('생성'),
               ),
               ],
             ),
@@ -99,7 +113,15 @@ class _ImagePage extends State<ImagePage> {
       );
   }
 
-
+Widget showImage() => Container(
+    width: MediaQuery.of(context).size.width,
+    height: 200.0,
+    child: Center(
+      child: _image  == null
+          ?  Text('No Image selected')
+          : Image.file(File(_image!.path)),
+    ),
+  );
 
 
 
