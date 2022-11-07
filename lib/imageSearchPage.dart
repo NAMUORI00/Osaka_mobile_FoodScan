@@ -14,8 +14,11 @@ class ImagePage extends StatefulWidget {
 
 
 class _ImagePage extends State<ImagePage> {
+
+   XFile? image;
+  dynamic sendDataPath;
   //임시
-  late Future<dynamic> image;
+  //final picker = ImagePicker();
   TextEditingController inputController = TextEditingController();
 
   @override
@@ -30,18 +33,55 @@ class _ImagePage extends State<ImagePage> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              //image = GetImage().galleryImage();
-               children: [
 
+               children: [
               const Padding(
                 padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
               ),
+
+                 FloatingActionButton(
+                   tooltip: 'pick camera',
+                   onPressed: () {
+                     final image = GetImage().cameraImage();
+                   },
+                   child: const Icon(Icons.add_a_photo),
+                 ),
+
+                 FloatingActionButton(
+                   tooltip: 'pick gallery image',
+                   onPressed: () {
+                     final image = GetImage().galleryImage();
+                     image.then((img){
+                       sendDataPath = img.path;
+                       print("image Path : ${sendDataPath}");
+                     });
+                     //throw 발생
+                     //final img = image as XFile?;
+                     //if (img != null) {
+                     //  sendDataPath = img.path;
+                     //  print("image Path : ${sendDataPath}");
+                    // }
+
+                   },
+                   child: const Icon(Icons.wallpaper),
+                 ),
+
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 200.0,
+                child: Center(
+                  child: image  ==null
+                  ? const Text('No Image selected')
+                  : Image.file(sendDataPath),
+                ),
+              ),
+
               ElevatedButton(
                 onPressed: () {
                   setState(() {
                   });
                   },
-                child: Text('검색'),
+                child: const Text('검색'),
               ),
               ],
             ),

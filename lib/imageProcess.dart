@@ -37,18 +37,36 @@ class GetImage{
     if (image != null) {
       dynamic sendData = image.path;
     }
-
   }
+
+
   
   //카메라 촬영모드
   Future cameraImage() async {
     var image = await picker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 240.0,
-      maxWidth: 240.0,
+
     );
 
     return image;
+  }
+
+  //List<XFile> pickImages = [];
+  //갤러리에 있는 멀티 이미지 선택
+  Future galleryMultiImage() async{
+    final List<XFile> images = await picker.pickMultiImage(
+
+      maxHeight: 75,
+      maxWidth: 75,
+      imageQuality: 30,
+    );
+
+    return images;
+
+    //if (images != null){
+    //  pickImages = images;
+    //}
+
   }
 
 }
