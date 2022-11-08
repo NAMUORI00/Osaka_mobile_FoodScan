@@ -80,18 +80,6 @@ class _ImagePage extends State<ImagePage> {
                    tooltip: 'pick gallery image',
                    onPressed: () {
                      getImage(ImageSource.gallery);
-
-                     //path.then((img){
-                     //  sendDataPath = img;
-                     //  print("test1, this image Path : $sendDataPath");
-                     //});
-
-                     //image = GetImage().galleryImage();
-                     //image.then((img){
-                     //  sendDataPath = img.path;
-                     //print("test2, this image sendDataPath : $sendDataPath"); //null 출력
-                     //});
-
                    },
                    child: const Icon(Icons.wallpaper),
                  ),
@@ -117,12 +105,49 @@ Widget showImage() => Container(
     width: MediaQuery.of(context).size.width,
     height: 200.0,
     child: Center(
+      child: GestureDetector(
+        //터치하고 떼는 순간 image 불러옴
+        onTapUp: (details) {
+          getImage(ImageSource.gallery);
+          //takeImage(context);
+        },
+       child : Container(
+      //카메라 아이콘 크기 설정
+      width: MediaQuery.of(context).size.width,
+           child:  _image  == null
+           ? FittedBox(child : Icon( Icons.add_a_photo,))
+               : Image.file(File(_image!.path)),
+      ),)
+      /*
       child: _image  == null
           ?  Text('No Image selected')
-          : Image.file(File(_image!.path)),
+          : Image.file(File(_image!.path)),*/
     ),
   );
 
 
 
+/*오류남
+
+  takeImage(contextMessage){
+    return showDialog(context: contextMessage, builder: (context){
+      return SimpleDialog(
+        title: const Text('take image', style: TextStyle(),),
+        children: <Widget>[
+          SimpleDialogOption(
+            child: const Text('Camera'),
+            onPressed:() => getImage(ImageSource.camera),
+          ),
+          SimpleDialogOption(
+            child: const Text('Gallery'),
+            onPressed:() => getImage(ImageSource.gallery),
+          ),
+          SimpleDialogOption(
+            child: const Text('Cancel'),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      );
+  });
+}*/
 }
