@@ -9,18 +9,6 @@ https://dkswnkk.tistory.com/334
 
 https://pub.dev/packages/image_picker
 */
-/*
-    // Pick an image 갤러리에서 이미지 선택
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    // Capture a photo 카메라로 이미지 촬영
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-    // Pick a video 갤러리에서 비디오 선택
-    final XFile? image = await _picker.pickVideo(source: ImageSource.gallery);
-    // Capture a video 카메라로 비디오 촬영
-    final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
-    // Pick multiple images 여러 이미지 선택
-    final List<XFile>? images = await _picker.pickMultiImage();
-*/
 
 class ImagePage extends StatefulWidget {
   const ImagePage({Key? key, required this.title}) : super(key: key);
@@ -35,7 +23,12 @@ class _ImagePage extends State<ImagePage> {
   File? _image;
   final picker = ImagePicker();
 
+  //이미지를 받아오는 함수
+  //imageSource 가 ImageSource.gallery 이면 갤러리에서 이미지 선택
+  //ImageSource.camera 이면 카메라로 이미지 촬영
+  //여러 이미지 선택 : final List<File>? images = await _picker.pickMultiImage();
   Future getImage(ImageSource imageSource) async{
+    //final image = await picker.pickVideo( //비디오
     final image = await picker.pickImage(
         source: imageSource,
       //maxHeight: 75,
@@ -68,6 +61,7 @@ class _ImagePage extends State<ImagePage> {
 
                  showImage(),
 
+                 /* 아이콘 버튼
                  FloatingActionButton(
                    tooltip: 'pick camera',
                    onPressed: () {
@@ -83,7 +77,7 @@ class _ImagePage extends State<ImagePage> {
                    },
                    child: const Icon(Icons.wallpaper),
                  ),
-
+                 */
 
 
               ElevatedButton(
@@ -125,9 +119,10 @@ Widget showImage() => Container(
     ),
   );
 
-
-
 /*오류남
+// 다이어로그, 카메라 혹은 이미지 선택, 그리고 취소를 선택 가능함.
+// 카메라 누르면 카메라 실행,
+//이미지 누르면 갤러리 실행
 
   takeImage(contextMessage){
     return showDialog(context: contextMessage, builder: (context){
