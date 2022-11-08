@@ -38,6 +38,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.6
   dio: ^4.0.6
+  async:
+  http:
+  path:
 
 
 dev_dependencies:

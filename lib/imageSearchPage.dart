@@ -1,14 +1,16 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-/*참조 중
-https://stackoverflow.com/questions/44841729/how-to-upload-images-to-server-in-flutter/51322060#51322060
-https://usedpaper.tistory.com/58
-https://dkswnkk.tistory.com/334
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+//import 'ImageCheckPage.dart';
+//import 'ImageProcess.dart';
 
-https://pub.dev/packages/image_picker
+/*참조 중
+
 */
 
 class ImagePage extends StatefulWidget {
@@ -42,29 +44,37 @@ class _ImagePage extends State<ImagePage> {
     });
   }
 
-  Future postImage( {required dynamic image,  required String baseUri}) async{
-    print("Started data communication");
-    print(baseUri);
-    var dio = Dio();
-    try {
-      dio.options.contentType = 'multipart/form-data';
-      //dio.options.maxRedirects.isFinite;
+//네트워크 메소드
+  //이미지를 입력하여 json을 받아옴
+  Future uploadImage(File imageFile) async {
+    // open a bytestream
+    var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    // get file length
+    var length = await imageFile.length();
 
-      //권한 부여문
-      //dio.options.headers = {'required': true};
-     // dio.options.headers["authorization"] = "strict-origin-when-cross-origin";
-      var response = await dio.post(
-        baseUri ,
-        data: image,
-      );
-      print(response.statusCode);
-      print('성공적으로 업로드했습니다');
-      print(response.data);
-      return response.data;
-    } catch (e) {
-      print(e);
-    }
+    // string to uri
+    var uri = Uri.parse("http://admin.namuori.net:5050/upload/web");
+
+    // create multipart request
+    var request = new http.MultipartRequest("POST", uri);
+
+    // multipart that takes file
+    var multipartFile = http.MultipartFile('file', stream, length,
+        filename: basename(imageFile.path));
+
+    // add file to multipart
+    request.files.add(multipartFile);
+
+    // send
+    var response = await request.send();
+    print(response.statusCode);
+
+    // listen for response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +98,9 @@ class _ImagePage extends State<ImagePage> {
 
               ElevatedButton(
                 onPressed: () {
+                  uploadImage(_image!);
                   setState(() {
-                    postImage(
-                      image: _image,
-                      baseUri: 'http://admin.namuori.net:5050/upload',
-                    );
+                    //ImageCheckPage(title: 'image',);
                   });
                   },
                 child: const Text('생성'),
@@ -106,7 +114,7 @@ class _ImagePage extends State<ImagePage> {
   }
 
 Widget showImage() => Container(
-    width: MediaQuery.of(context).size.width,
+    //width: MediaQuery.of(context).size.width,
     height: 200.0,
     child: Center(
       child: GestureDetector(
@@ -117,7 +125,7 @@ Widget showImage() => Container(
         },
        child : Container(
       //카메라 아이콘 크기 설정
-      width: MediaQuery.of(context).size.width,
+      //width: MediaQuery.of(context).size.width,
            child:  _image  == null
            ? FittedBox(child : Icon( Icons.add_a_photo,))
                : Image.file(File(_image!.path)),
