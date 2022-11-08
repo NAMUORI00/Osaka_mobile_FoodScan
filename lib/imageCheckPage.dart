@@ -18,6 +18,16 @@ class _ImageCheckPage extends State<ImageCheckPage> {
   Widget build(BuildContext context) {
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        //DefaultTextStyle(
+        //  style: Theme.of(context).textTheme.headline5!,
+        //  child: null,
+
+          
+      //)
+          ],
+
     );
   }
 }

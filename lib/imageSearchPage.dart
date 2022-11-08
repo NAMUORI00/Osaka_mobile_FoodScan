@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -41,6 +42,30 @@ class _ImagePage extends State<ImagePage> {
     });
   }
 
+  Future postImage( {required dynamic image,  required String baseUri}) async{
+    print("Started data communication");
+    print(baseUri);
+    var dio = Dio();
+    try {
+      dio.options.contentType = 'multipart/form-data';
+      //dio.options.maxRedirects.isFinite;
+
+      //권한 부여문
+      //dio.options.headers = {'required': true};
+     // dio.options.headers["authorization"] = "strict-origin-when-cross-origin";
+      var response = await dio.post(
+        baseUri ,
+        data: image,
+      );
+      print(response.statusCode);
+      print('성공적으로 업로드했습니다');
+      print(response.data);
+      return response.data;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -61,28 +86,13 @@ class _ImagePage extends State<ImagePage> {
 
                  showImage(),
 
-                 /* 아이콘 버튼
-                 FloatingActionButton(
-                   tooltip: 'pick camera',
-                   onPressed: () {
-                     getImage(ImageSource.camera);
-                   },
-                   child: const Icon(Icons.add_a_photo),
-                 ),
-
-                 FloatingActionButton(
-                   tooltip: 'pick gallery image',
-                   onPressed: () {
-                     getImage(ImageSource.gallery);
-                   },
-                   child: const Icon(Icons.wallpaper),
-                 ),
-                 */
-
-
               ElevatedButton(
                 onPressed: () {
                   setState(() {
+                    postImage(
+                      image: _image,
+                      baseUri: 'http://admin.namuori.net:5050/upload',
+                    );
                   });
                   },
                 child: const Text('생성'),
@@ -146,3 +156,22 @@ Widget showImage() => Container(
   });
 }*/
 }
+
+//현재 미사용 UI 데이터
+/* 아이콘 버튼
+                 FloatingActionButton(
+                   tooltip: 'pick camera',
+                   onPressed: () {
+                     getImage(ImageSource.camera);
+                   },
+                   child: const Icon(Icons.add_a_photo),
+                 ),
+
+                 FloatingActionButton(
+                   tooltip: 'pick gallery image',
+                   onPressed: () {
+                     getImage(ImageSource.gallery);
+                   },
+                   child: const Icon(Icons.wallpaper),
+                 ),
+                 */
