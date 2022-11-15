@@ -315,7 +315,7 @@
 {"korean":"훈제치킨","english":"Smoked Chicken","latin":"hunje chicken","servingsize":100,"energy":180,"protein":17,"fat":"-","carbohydrate":"-"},
 {"korean":"도토리묵","english":"Acorn Jelly Salad","latin":"dotori muk","servingsize":100,"energy":45.6,"protein":0.29,"fat":"0.32","carbohydrate":"10.38"},
 {"korean":"오징어링","english":"Fried Squid Rings","latin":"ojingeo ring","servingsize":64,"energy":178,"protein":10,"fat":"-","carbohydrate":"-"},
-{"korean":"라면사리","english":"Extra Ramyeon Noodles","latin":"ramyeon sari","servingsize":260,"energy":-,"protein":10,"fat":"13","carbohydrate":"90"},
+{"korean":"라면사리","english":"Extra Ramyeon Noodles","latin":"ramyeon sari","servingsize":260,"energy":"-","protein":10,"fat":"13","carbohydrate":"90"},
 {"korean":"라면","english":"Ramyeon","latin":"ramyeon","servingsize":550,"energy":450.91,"protein":9.48,"fat":"12.52","carbohydrate":"75.08"},
 {"korean":"김치라면","english":"Kimchi Ramyeon","latin":"kimchi ramyeon","servingsize":650,"energy":552,"protein":13.8,"fat":"16.9","carbohydrate":"86.2"},
 {"korean":"떡라면","english":"Rice Cake Ramyeon","latin":"tteok ramyeon","servingsize":550,"energy":525.49,"protein":11.21,"fat":"16.07","carbohydrate":"84.01"},

@@ -1,17 +1,107 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:async';
 
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:flutter/services.dart';
 //import 'ImageCheckPage.dart';
 //import 'ImageProcess.dart';
 
 /*참조 중
 
 */
+
+
+// To parse this JSON data, do
+//
+//     final result = resultFromJson(jsonString);
+
+
+List<Map<String, Result>> resultFromJson(String str) => List<Map<String, Result>>.from(json.decode(str).map((x) => Map.from(x).map((k, v) => MapEntry<String, Result>(k, Result.fromJson(v)))));
+
+String resultToJson(List<Map<String, Result>> data) => json.encode(List<dynamic>.from(data.map((x) => Map.from(x).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))));
+
+class Result {
+  Result({
+    this.descripton,
+    this.score,
+  });
+
+  String? descripton;
+  double? score;
+
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
+    descripton: json["descripton"],
+    score: json["score"].toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "descripton": descripton,
+    "score": score,
+  };
+}
+
+
+
+// To parse this JSON data, do
+//
+//     final food = foodFromJson(jsonString);
+
+
+List<Food> foodFromJson(String str) => List<Food>.from(json.decode(str).map((x) => Food.fromJson(x)));
+
+String foodToJson(List<Food> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Food {
+  Food({
+    this.korean,
+    this.english,
+    this.latin,
+    this.servingsize,
+    this.energy,
+    this.protein,
+    this.fat,
+    this.carbohydrate,
+  });
+
+  String? korean;
+  String? english;
+  String? latin;
+  int? servingsize;
+  dynamic energy;
+  double? protein;
+  String? fat;
+  String? carbohydrate;
+
+  factory Food.fromJson(Map<String, dynamic> json) => Food(
+    korean: json["korean"],
+    english: json["english"],
+    latin: json["latin"],
+    servingsize: json["servingsize"],
+    energy: json["energy"],
+    protein: json["protein"].toDouble(),
+    fat: json["fat"],
+    carbohydrate: json["carbohydrate"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "korean": korean,
+    "english": english,
+    "latin": latin,
+    "servingsize": servingsize,
+    "energy": energy,
+    "protein": protein,
+    "fat": fat,
+    "carbohydrate": carbohydrate,
+  };
+}
+
+
 
 class ImagePage extends StatefulWidget {
   const ImagePage({Key? key, required this.title}) : super(key: key);
@@ -47,6 +137,10 @@ class _ImagePage extends State<ImagePage> {
 //네트워크 메소드
   //이미지를 입력하여 json을 받아옴
   Future uploadImage(File imageFile) async {
+
+    // nutrition 파일 로드
+    String jsonString = await rootBundle.loadString('assets/json/nutrition.json');
+
     // open a bytestream
     var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     // get file length
@@ -71,7 +165,24 @@ class _ImagePage extends State<ImagePage> {
 
     // listen for response
     response.stream.transform(utf8.decoder).listen((value) {
+
       print(value);
+
+      //JSON 파싱
+      final result = resultFromJson(value);
+      final food = foodFromJson(jsonString);
+
+      // 같은 값을 라틴어(한국어음독), 영어, 한국어로 검색하고 존재할 경우 영양정보 JSON 순서값 프린트
+      for(int i = 0; i < result.length; i++){
+        for(int j = 0; j < food.length; j++) {
+          if (food[j].english?.toLowerCase() == result[i][i.toString()]?.descripton?.toLowerCase() || food[j].latin?.toLowerCase() == result[i][i.toString()]?.descripton?.toLowerCase() || food[j].korean == result[i][i.toString()]?.descripton) {
+            print(j);
+          }
+        }
+      }
+
+
+
     });
   }
 
