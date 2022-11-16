@@ -2,106 +2,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
-
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+
+import 'Food.dart';
 //import 'ImageCheckPage.dart';
 //import 'ImageProcess.dart';
 
 /*참조 중
 
 */
-
-
-// To parse this JSON data, do
-//
-//     final result = resultFromJson(jsonString);
-
-
-List<Map<String, Result>> resultFromJson(String str) => List<Map<String, Result>>.from(json.decode(str).map((x) => Map.from(x).map((k, v) => MapEntry<String, Result>(k, Result.fromJson(v)))));
-
-String resultToJson(List<Map<String, Result>> data) => json.encode(List<dynamic>.from(data.map((x) => Map.from(x).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))));
-
-class Result {
-  Result({
-    this.descripton,
-    this.score,
-  });
-
-  String? descripton;
-  double? score;
-
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
-    descripton: json["descripton"],
-    score: json["score"].toDouble(),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "descripton": descripton,
-    "score": score,
-  };
-}
-
-
-
-// To parse this JSON data, do
-//
-//     final food = foodFromJson(jsonString);
-
-
-List<Food> foodFromJson(String str) => List<Food>.from(json.decode(str).map((x) => Food.fromJson(x)));
-
-String foodToJson(List<Food> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class Food {
-  Food({
-    this.korean,
-    this.english,
-    this.latin,
-    this.servingsize,
-    this.energy,
-    this.protein,
-    this.fat,
-    this.carbohydrate,
-  });
-
-  String? korean;
-  String? english;
-  String? latin;
-  int? servingsize;
-  dynamic energy;
-  double? protein;
-  String? fat;
-  String? carbohydrate;
-
-  factory Food.fromJson(Map<String, dynamic> json) => Food(
-    korean: json["korean"],
-    english: json["english"],
-    latin: json["latin"],
-    servingsize: json["servingsize"],
-    energy: json["energy"],
-    protein: json["protein"].toDouble(),
-    fat: json["fat"],
-    carbohydrate: json["carbohydrate"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "korean": korean,
-    "english": english,
-    "latin": latin,
-    "servingsize": servingsize,
-    "energy": energy,
-    "protein": protein,
-    "fat": fat,
-    "carbohydrate": carbohydrate,
-  };
-}
-
-
 
 class ImagePage extends StatefulWidget {
   const ImagePage({Key? key, required this.title}) : super(key: key);
@@ -181,8 +95,6 @@ class _ImagePage extends State<ImagePage> {
         }
       }
 
-
-
     });
   }
 
@@ -248,49 +160,5 @@ Widget showImage() => Container(
     ),
   );
 
-/*오류남
-// 다이어로그, 카메라 혹은 이미지 선택, 그리고 취소를 선택 가능함.
-// 카메라 누르면 카메라 실행,
-//이미지 누르면 갤러리 실행
-
-  takeImage(contextMessage){
-    return showDialog(context: contextMessage, builder: (context){
-      return SimpleDialog(
-        title: const Text('take image', style: TextStyle(),),
-        children: <Widget>[
-          SimpleDialogOption(
-            child: const Text('Camera'),
-            onPressed:() => getImage(ImageSource.camera),
-          ),
-          SimpleDialogOption(
-            child: const Text('Gallery'),
-            onPressed:() => getImage(ImageSource.gallery),
-          ),
-          SimpleDialogOption(
-            child: const Text('Cancel'),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      );
-  });
-}*/
 }
 
-//현재 미사용 UI 데이터
-/* 아이콘 버튼
-                 FloatingActionButton(
-                   tooltip: 'pick camera',
-                   onPressed: () {
-                     getImage(ImageSource.camera);
-                   },
-                   child: const Icon(Icons.add_a_photo),
-                 ),
-
-                 FloatingActionButton(
-                   tooltip: 'pick gallery image',
-                   onPressed: () {
-                     getImage(ImageSource.gallery);
-                   },
-                   child: const Icon(Icons.wallpaper),
-                 ),
-                 */
