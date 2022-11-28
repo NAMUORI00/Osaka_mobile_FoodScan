@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'SearchPage.dart';
 import 'example.dart';
-import 'imageSearchPage.dart';
+import '../imageSearchPage.dart';
 
 void main() {
   runApp(const MyApp());
