@@ -13,12 +13,14 @@ class StatisticsWidget extends StatefulWidget {
   _StatisticsWidgetState createState() => _StatisticsWidgetState();
 }
 
-class _StatisticsWidgetState extends State<StatisticsWidget> {
+class _StatisticsWidgetState extends State<StatisticsWidget> with AutomaticKeepAliveClientMixin<StatisticsWidget>  {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryColor,
@@ -392,4 +394,8 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

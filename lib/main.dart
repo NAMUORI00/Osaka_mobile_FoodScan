@@ -38,6 +38,8 @@ class _MyAppState extends State<MyApp> {
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
 
+  bool get wantKeppAlive => true;
+
   @override
   void initState() {
     super.initState();
@@ -56,6 +58,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp.router(
       title: '헬스캡처',
       localizationsDelegates: [

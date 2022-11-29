@@ -22,9 +22,12 @@ class ImageSearchWidget extends StatefulWidget {
   _ImageSearchWidgetState createState() => _ImageSearchWidgetState();
 }
 
-class _ImageSearchWidgetState extends State<ImageSearchWidget> {
+class _ImageSearchWidgetState extends State<ImageSearchWidget> with AutomaticKeepAliveClientMixin<ImageSearchWidget>{
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  var foodData = List<FoodInfo>.empty(growable: true);
+
+  //late List<FoodInfo> foodData;
   File? _image;
   final picker = ImagePicker();
 
@@ -32,7 +35,7 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
   //imageSource 가 ImageSource.gallery 이면 갤러리에서 이미지 선택
   //ImageSource.camera 이면 카메라로 이미지 촬영
   //여러 이미지 선택 : final List<File>? images = await _picker.pickMultiImage();
-  Future getImage(ImageSource imageSource) async{
+  Future getImage(ImageSource imageSource) async {
     //final image = await picker.pickVideo( //비디오
     final image = await picker.pickImage(
       source: imageSource,
@@ -50,9 +53,9 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
   //네트워크 메소드
   //이미지를 입력하여 json을 받아옴
   Future uploadImage(File imageFile) async {
-
     // nutrition 파일 로드
-    String jsonString = await rootBundle.loadString('assets/json/nutrition.json');
+    String jsonString = await rootBundle.loadString(
+        'assets/json/nutrition.json');
 
     // open a bytestream
     var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
@@ -78,7 +81,6 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
 
     // listen for response
     response.stream.transform(utf8.decoder).listen((value) {
-
       print(value);
 
       //JSON 파싱
@@ -86,10 +88,26 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
       final food = foodFromJson(jsonString);
 
       // 같은 값을 라틴어(한국어음독), 영어, 한국어로 검색하고 존재할 경우 영양정보 JSON 순서값 프린트
-      for(int i = 0; i < result.length; i++){
-        for(int j = 0; j < food.length; j++) {
-          if (food[j].english?.toLowerCase() == result[i][i.toString()]?.descripton?.toLowerCase() || food[j].latin?.toLowerCase() == result[i][i.toString()]?.descripton?.toLowerCase() || food[j].korean == result[i][i.toString()]?.descripton) {
+      for (int i = 0; i < result.length; i++) {
+        for (int j = 0; j < food.length; j++) {
+          if (food[j].english?.toLowerCase() ==
+              result[i][i.toString()]?.descripton?.toLowerCase() ||
+              food[j].latin?.toLowerCase() ==
+                  result[i][i.toString()]?.descripton?.toLowerCase() ||
+              food[j].korean == result[i][i.toString()]?.descripton) {
             print(j);
+
+            //%으로 변환 
+            double? temp = result[i][i.toString()]?.score;
+            temp = (temp! * 100)!;
+
+            //유의미한 데이터를 FoodInfo에 넣음
+            final fd = FoodInfo(food: food[j], score: temp.round());
+            print('${fd.food.carbohydrate}, ${fd.food.energy}, ${fd.food
+                .korean}, ${fd.food.fat}, ${fd.food.protein}, ${fd.score}');
+
+            //FoodInfo 리스트에 추가
+            foodData.add(fd);
           }
         }
       }
@@ -99,18 +117,25 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
   //UI
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: const Color(0xFFFFEEE4),
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        backgroundColor: FlutterFlowTheme
+            .of(context)
+            .primaryColor,
         automaticallyImplyLeading: false,
-        title: Text( '헬스캡쳐',
-          style: FlutterFlowTheme.of(context).title2.override(
-                fontFamily: 'Poppins',
-                color: Colors.white,
-                fontSize: 22,
-              ),
+        title: Text('헬스캡쳐',
+          style: FlutterFlowTheme
+              .of(context)
+              .title2
+              .override(
+            fontFamily: 'Poppins',
+            color: Colors.white,
+            fontSize: 22,
+          ),
 
         ),
         centerTitle: true,
@@ -138,8 +163,14 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.18,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.18,
                   decoration: const BoxDecoration(
                     color: Color(0xFFFFEEE4),
                     shape: BoxShape.rectangle,
@@ -149,33 +180,41 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            20, 20, 20, 0),
                         child: Text(
                           '음식 등록',
                           textAlign: TextAlign.start,
                           style:
-                              FlutterFlowTheme.of(context).subtitle1.override(
-                                    fontFamily: 'koreansimple',
-                                    color: Colors.black,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    useGoogleFonts: false,
-                                  ),
+                          FlutterFlowTheme
+                              .of(context)
+                              .subtitle1
+                              .override(
+                            fontFamily: 'koreansimple',
+                            color: Colors.black,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            useGoogleFonts: false,
+                          ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(25, 5, 0, 10),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            25, 5, 0, 10),
                         child: Text(
                           '사진 업로드',
-                          style: FlutterFlowTheme.of(context)
+                          style: FlutterFlowTheme
+                              .of(context)
                               .bodyText1
                               .override(
-                                fontFamily: 'koreansimple',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                fontWeight: FontWeight.bold,
-                                useGoogleFonts: false,
-                              ),
+                            fontFamily: 'koreansimple',
+                            color:
+                            FlutterFlowTheme
+                                .of(context)
+                                .secondaryText,
+                            fontWeight: FontWeight.bold,
+                            useGoogleFonts: false,
+                          ),
                         ),
                       ),
                     ],
@@ -186,61 +225,57 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       height: 200,
                       decoration: const BoxDecoration(
                         color: Colors.transparent,
                       ),
                       child: GestureDetector(
-                        onTapUp: (details) {
-                          getImage(ImageSource.gallery);
-                        },
-                        child : SizedBox(
-                        //  'assets/images/coverEmpty@3x.png',
-                        width: 100,
-                        height: 100,
-                        //fit: BoxFit.cover,
-                          child:  _image  == null
-                              ? const FittedBox(child : Icon( Icons.add_a_photo,))
-                              : Image.file(
-                            File(_image!.path),
+                          onTapUp: (details) {
+                            getImage(ImageSource.gallery);
+                          },
+                          child: SizedBox(
+                            //  'assets/images/coverEmpty@3x.png',
                             width: 100,
                             height: 100,
                             //fit: BoxFit.cover,
-                          ),
-                              //: Image.asset(_image!.path),
-                      )),
+                            child: _image == null
+                                ? const FittedBox(
+                                child: Icon(Icons.add_a_photo,))
+                                : Image.file(
+                              File(_image!.path),
+                              width: 100,
+                              height: 100,
+                              //fit: BoxFit.cover,
+                            ),
+                            //: Image.asset(_image!.path),
+                          )),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       height: 120,
                       decoration: const BoxDecoration(
                         color: Colors.transparent,
                       ),
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(50, 30, 50, 30),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            50, 30, 50, 30),
                         child: FFButtonWidget(
-                          onPressed: () => showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('등록 확인'),
-                              content: const Text('이 음식이 맞나요?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                                  child: const Text('아니오'),
-                                ),
-                                TextButton(
-                                  onPressed: () => {
-                                    Navigator.pop(context, 'OK'),
-                                  uploadImage(_image!)
-                                  },
-                                  child: const Text('네'),
+                          //등록 버튼을 누르면 이미지 업로드 및 다이어로그 출력
+                          onPressed: () =>
+                          {
+                            uploadImage(_image!),
 
-                                ),
-                              ],
-                            ),
-                          ),
+                            foodData.first == null
+                                ? loading(context)
+                                : dl(context)
+                          },
                           //{print('Button pressed ...');
                           //  uploadImage(_image!);},
                           text: '등록',
@@ -249,10 +284,13 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                             height: 40,
                             color: const Color(0xFFEE8B60),
                             textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                    ),
+                            FlutterFlowTheme
+                                .of(context)
+                                .subtitle2
+                                .override(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                            ),
                             elevation: 4,
                             borderSide: const BorderSide(
                               color: Colors.transparent,
@@ -264,13 +302,17 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       height: 30,
                       decoration: const BoxDecoration(
                         color: Colors.transparent,
                       ),
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(50, 0, 50, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            50, 0, 50, 0),
                         child: FFButtonWidget(
                           onPressed: () {
                             print('Button pressed ...');
@@ -282,10 +324,13 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                             height: 40,
                             color: const Color(0xFFFFEEE4),
                             textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Poppins',
-                                      color: const Color(0xFFCE6D39),
-                                    ),
+                            FlutterFlowTheme
+                                .of(context)
+                                .subtitle2
+                                .override(
+                              fontFamily: 'Poppins',
+                              color: const Color(0xFFCE6D39),
+                            ),
                             borderSide: const BorderSide(
                               color: Colors.transparent,
                               width: 1,
@@ -300,8 +345,65 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
               ],
             ),
           ),
-        ),
-      ),
+        ), ),
     );
   }
+
+  dl(context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) =>
+          AlertDialog(
+            title: const Text('등록 확인'),
+            content: Text(
+                ' \'${foodData.first.food.korean}\'이 맞나요?   일치율: ${foodData
+                    .first.score}%'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('아니오'),
+              ),
+              TextButton(
+                onPressed: () =>
+                {
+                  Navigator.pop(context, 'OK'),
+                },
+                child: const Text('네'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  loading(context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0)
+          ),
+          content: const SizedBox(
+            height: 200,
+            child: Center(
+                child: SizedBox(
+                  height: 50.0,
+                  width: 50.0,
+                  child:
+                  CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.blue),
+                      strokeWidth: 5.0
+                  ),
+                )
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
 }

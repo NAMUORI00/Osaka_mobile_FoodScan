@@ -85,3 +85,12 @@ class Food {
   };
 }
 
+class FoodInfo{
+  FoodInfo({
+    required this.food,
+    required this.score
+});
+
+  Food food;
+  int score;
+}
