@@ -1,9 +1,9 @@
 
+import '../SettingPage.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 
 import 'package:flutter/services.dart';
@@ -105,16 +105,29 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         automaticallyImplyLeading: false,
-        title: Text(
-          'Osaka',
+        title: Text( '헬스캡쳐',
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Poppins',
                 color: Colors.white,
                 fontSize: 22,
               ),
+
         ),
-        actions: [],
-        centerTitle: false,
+        centerTitle: true,
+        actions: [
+          IconButton(
+            tooltip: '설정으로 들어가기',
+            enableFeedback: true,
+            icon:
+            const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingPage()),
+              );
+            },
+          )
+        ],
         elevation: 2,
       ),
       body: SafeArea(
@@ -126,7 +139,7 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery.of(context).size.height * 0.18,
                   decoration: const BoxDecoration(
                     color: Color(0xFFFFEEE4),
                     shape: BoxShape.rectangle,
@@ -136,7 +149,7 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 5),
+                        padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                         child: Text(
                           '음식 등록',
                           textAlign: TextAlign.start,
@@ -151,7 +164,7 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 0, 10),
+                        padding: const EdgeInsetsDirectional.fromSTEB(25, 5, 0, 10),
                         child: Text(
                           '사진 업로드',
                           style: FlutterFlowTheme.of(context)
