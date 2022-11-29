@@ -193,7 +193,7 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                             File(_image!.path),
                             width: 100,
                             height: 100,
-                            fit: BoxFit.cover,
+                            //fit: BoxFit.cover,
                           ),
                               //: Image.asset(_image!.path),
                       )),
@@ -207,10 +207,29 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> {
                       child: Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(50, 30, 50, 30),
                         child: FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
-                            uploadImage(_image!);
-                          },
+                          onPressed: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('등록 확인'),
+                              content: const Text('이 음식이 맞나요?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                  child: const Text('아니오'),
+                                ),
+                                TextButton(
+                                  onPressed: () => {
+                                    Navigator.pop(context, 'OK'),
+                                  uploadImage(_image!)
+                                  },
+                                  child: const Text('네'),
+
+                                ),
+                              ],
+                            ),
+                          ),
+                          //{print('Button pressed ...');
+                          //  uploadImage(_image!);},
                           text: '등록',
                           options: FFButtonOptions(
                             width: 130,

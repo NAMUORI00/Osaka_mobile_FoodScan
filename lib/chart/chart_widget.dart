@@ -34,6 +34,7 @@ class _ChartWidgetState extends State<ChartWidget> {
           ),
           onPressed: () {
             print('IconButton pressed ...');
+            Navigator.pop(context);
           },
         ),
         title: Text(

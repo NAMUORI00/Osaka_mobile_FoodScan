@@ -1,3 +1,5 @@
+import 'package:osaka/index.dart';
+
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -13,6 +15,7 @@ class StatisticsWidget extends StatefulWidget {
 
 class _StatisticsWidgetState extends State<StatisticsWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +243,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                           height: 150,
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context).primaryColor,
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 blurRadius: 4,
                                 color: Color(0x37000000),
@@ -249,10 +252,19 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                             ],
                             borderRadius: BorderRadius.circular(8),
                           ),
+                          child: GestureDetector(
+                            //onTap: () {widgets['Chart'];},
+                            onTap: () => setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>  const ChartWidget())
+                              );
+                            }),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
+
                             children: [
-                              Padding(
+                              const Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                                 child: Icon(
@@ -293,7 +305,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                                 ),
                               ),
                             ],
-                          ),
+                          ),),
                         ),
                       ),
                     ),
@@ -314,7 +326,14 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                             ],
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Column(
+                          child: GestureDetector(
+                            onTap: () => setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) =>  const PastdataWidget())
+                              );
+                            }),
+                            child:Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -359,6 +378,7 @@ class _StatisticsWidgetState extends State<StatisticsWidget> {
                                 ),
                               ),
                             ],
+                          ),
                           ),
                         ),
                       ),
