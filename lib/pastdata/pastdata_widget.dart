@@ -47,6 +47,7 @@ class _PastdataWidgetState extends State<PastdataWidget> {
           ),
           onPressed: () {
             print('IconButton pressed ...');
+            Navigator.pop(context);
           },
         ),
         title: Text(
