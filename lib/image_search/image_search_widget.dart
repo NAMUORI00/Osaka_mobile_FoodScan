@@ -268,16 +268,69 @@ class _ImageSearchWidgetState extends State<ImageSearchWidget> with AutomaticKee
                             50, 30, 50, 30),
                         child: FFButtonWidget(
                           //등록 버튼을 누르면 이미지 업로드 및 다이어로그 출력
-                          onPressed: () =>
-                          {
-                            uploadImage(_image!),
 
-                            foodData.first == null
-                                ? loading(context)
-                                : dl(context)
+                          onPressed: () async {
+
+                            uploadImage(_image!);
+                            if(foodData.isNotEmpty){
+                              var confirmDialogResponse = await showDialog<bool>(
+                                context: context,
+                                builder: (alertDialogContext) {
+                                  return AlertDialog(
+                                    title: Text('등록 확인'),
+                                    content: Text(
+                                        ' \'${foodData.first.food.korean}\'이 맞나요?   일치율: ${foodData
+                                            .first.score}%'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(
+                                            alertDialogContext, false),
+                                        child: Text('아니오'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(
+                                            alertDialogContext, true),
+                                        child: Text('네'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ) ??
+                                  false;
+                              if (confirmDialogResponse) {
+                                context.pushNamed(
+                                  'DataEdit',
+                                  queryParams:  {
+                                    'foodName': serializeParam(
+                                      foodData.first.food.korean,
+                                      ParamType.String,
+                                    ),
+                                    'servingSize': serializeParam(
+                                      foodData.first.food.servingsize,
+                                      ParamType.int,
+                                    ),
+                                    'calorie': serializeParam(
+                                      foodData.first.food.energy,
+                                      ParamType.int,
+                                    ),
+                                    'carbohydrate': serializeParam(
+                                      foodData.first.food.carbohydrate,
+                                      ParamType.int,
+                                    ),
+                                    'fat': serializeParam(
+                                      foodData.first.food.fat,
+                                      ParamType.int,
+                                    ),
+                                    'protein': serializeParam(
+                                      foodData.first.food.protein,
+                                      ParamType.int,
+                                    ),
+                                  }.withoutNulls,
+                                );
+                              }
+                            }
+
                           },
-                          //{print('Button pressed ...');
-                          //  uploadImage(_image!);},
                           text: '등록',
                           options: FFButtonOptions(
                             width: 130,

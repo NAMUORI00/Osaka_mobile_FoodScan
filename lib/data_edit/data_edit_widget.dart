@@ -5,7 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DataEditWidget extends StatefulWidget {
-  const DataEditWidget({Key? key}) : super(key: key);
+  const DataEditWidget({
+    Key? key,
+    this.protein,
+    this.dataIndex,
+  }) : super(key: key);
+
+  final int? protein;
+  final int? dataIndex;
+
+
 
   @override
   _DataEditWidgetState createState() => _DataEditWidgetState();
@@ -24,13 +33,22 @@ class _DataEditWidgetState extends State<DataEditWidget> {
   @override
   void initState() {
     super.initState();
+    /*
+    textController1 = TextEditingController(text: widget.foodName?.toString());
+    textController2 = TextEditingController(text: '20201130');
+    textController3 = TextEditingController(text: widget.servingSize?.toString());
+    textController4 = TextEditingController(text: widget.calorie?.toString());
+    textController5 = TextEditingController(text: widget.carbohydrate?.toString());
+    textController6 = TextEditingController(text: widget.fat?.toString());
+    textController7 = TextEditingController(text: widget.protein?.toString());
+     */
     textController1 = TextEditingController();
-    textController2 = TextEditingController();
+    textController2 = TextEditingController(text: '20201130');
     textController3 = TextEditingController();
     textController4 = TextEditingController();
     textController5 = TextEditingController();
     textController6 = TextEditingController();
-    textController7 = TextEditingController();
+    textController7 = TextEditingController(text: widget.protein?.toString());
   }
 
   @override
