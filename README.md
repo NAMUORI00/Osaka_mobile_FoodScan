@@ -32,12 +32,11 @@
 
 
 
-# 사용한 API, 오픈소스, 데이터 리스트
+# 사용한 API, SDK
 
-1. [카카오맵 API](https://apis.map.kakao.com/)
-2. [Google Place API](https://developers.google.com/maps/documentation/places/web-service/overview)
-3. [공공데이터포털 데이터](https://www.data.go.kr/)
-4. [카카오 챗봇 API](https://i.kakao.com/docs/tutorial-chatbot-key-features) 
+1. [플러터 SDK](https://docs.flutter.dev/)
+2. [Google Vision API](https://cloud.google.com/vision/docs/apis)
+
 
 
 
@@ -55,7 +54,7 @@
 <p align="center">
 <table align="center" >
    <tr>
-        <td align="center"><a href="https://github.com/SebellKo"><img src="https://github.com/SebellKo.png" width="100px;" alt=""/><br /><sub><b><br/>고세종</b></sub></a></td>
+        <td align="center"><a href="https://github.com/TaeGyungKim"><img src="https://github.com/TaeGyungKim.png" width="100px;" alt=""/><br /><sub><b><br/>김태경</b></sub></a></td>
         <td align="center"><a href="https://github.com/NAMUORI00"><img src="https://github.com/NAMUORI00.png" width="100px;" alt=""/><br /><sub><b><br/>김유석</b></sub></a></td>
         <td align="center"><a href="https://github.com/jymh22"><img src="https://github.com/jymh22.png" width="100px;" alt=""/><br /><sub><b><br/>이홍규</b></sub></a></td>
      <td align="center"><a href="https://github.com/claris0"><img src="https://github.com/claris0.png" width="100px;" alt=""/><br /><sub><b><br/>선종호</b></sub></a></td>
@@ -67,7 +66,7 @@
 
 # 라이선스(License List)
 
-# OSS Notice | STILL #
+# OSS Notice | Osaka #
 
 This application is Copyright © CATEGORY. All rights reserved.
 
